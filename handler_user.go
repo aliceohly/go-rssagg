@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/aliceohly/go-rssagg/internal/auth"
 	"github.com/aliceohly/go-rssagg/internal/database"
 	"github.com/google/uuid"
 )
@@ -24,10 +25,26 @@ func (cfg *apiConfig) handlerUserCreate(w http.ResponseWriter, r *http.Request) 
 
 	user, err := cfg.DB.CreateUser(r.Context(), database.CreateUserParams{
 		ID:          uuid.New(),
-		CreatedAt:   time.Now(),
-		UpdatableAt: time.Now(),
+		CreatedAt:   time.Now().UTC(),
+		UpdatableAt: time.Now().UTC(),
 		Name:        params.Name,
 	})
+	if err != nil {
+		responseWithErr(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	responseWithJSON(w, http.StatusOK, dbUserToUser(user))
+}
+
+func (cfg *apiConfig) handlerUserGet(w http.ResponseWriter, r *http.Request) {
+	apiKey, err := auth.GetApiKey(r.Header)
+	if err != nil {
+		responseWithErr(w, http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	user, err := cfg.DB.GetUserByAPIKey(r.Context(), apiKey)
 	if err != nil {
 		responseWithErr(w, http.StatusInternalServerError, err.Error())
 		return
