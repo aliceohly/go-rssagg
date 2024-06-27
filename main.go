@@ -63,6 +63,10 @@ func main() {
 	v1Router.Get("/feeds", apiCfg.handlerFeedsGet)
 	v1Router.Post("/feeds", apiCfg.middlewareAuth(apiCfg.handlerFeedCreate))
 
+	v1Router.Get("/feed_follow", apiCfg.middlewareAuth(apiCfg.handlerFeedFollowGet))
+	v1Router.Post("/feed_follow", apiCfg.middlewareAuth(apiCfg.handlerFeedFollowCreate))
+	v1Router.Delete("/feed_follow/{feedFollowId}", apiCfg.middlewareAuth(apiCfg.handlerFeedFollowDelete))
+
 	router.Mount("/v1", v1Router)
 
 	// why need to add & before http.Server?
