@@ -24,12 +24,12 @@ func (cfg *apiConfig) handlerFeedCreate(w http.ResponseWriter, r *http.Request, 
 	}
 
 	feed, err := cfg.DB.CreateFeed(r.Context(), database.CreateFeedParams{
-		ID:          uuid.New(),
-		Name:        params.Name,
-		Url:         params.Url,
-		CreatedAt:   time.Now().UTC(),
-		UpdatableAt: time.Now().UTC(),
-		UserID:      user.ID,
+		ID:        uuid.New(),
+		Name:      params.Name,
+		Url:       params.Url,
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
+		UserID:    user.ID,
 	})
 	if err != nil {
 		responseWithErr(w, http.StatusInternalServerError, err.Error())

@@ -23,10 +23,10 @@ func (cfg *apiConfig) handlerUserCreate(w http.ResponseWriter, r *http.Request) 
 	}
 
 	user, err := cfg.DB.CreateUser(r.Context(), database.CreateUserParams{
-		ID:          uuid.New(),
-		CreatedAt:   time.Now().UTC(),
-		UpdatableAt: time.Now().UTC(),
-		Name:        params.Name,
+		ID:        uuid.New(),
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
+		Name:      params.Name,
 	})
 	if err != nil {
 		responseWithErr(w, http.StatusInternalServerError, err.Error())

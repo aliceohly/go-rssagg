@@ -24,11 +24,11 @@ func (cfg *apiConfig) handlerFeedFollowCreate(w http.ResponseWriter, r *http.Req
 	}
 
 	feedFollow, err := cfg.DB.CreateFeedFollow(r.Context(), database.CreateFeedFollowParams{
-		ID:          uuid.New(),
-		CreatedAt:   time.Now().UTC(),
-		UpdatableAt: time.Now().UTC(),
-		UserID:      user.ID,
-		FeedID:      params.FeedId,
+		ID:        uuid.New(),
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
+		UserID:    user.ID,
+		FeedID:    params.FeedId,
 	})
 	if err != nil {
 		responseWithErr(w, http.StatusInternalServerError, err.Error())
