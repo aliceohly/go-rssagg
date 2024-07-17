@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/aliceohly/go-rssagg/internal/database"
 	"github.com/go-chi/chi"
@@ -71,6 +72,10 @@ func main() {
 
 	// why need to add & before http.Server?
 	server := http.Server{Addr: ":" + port, Handler: router}
+
+	const collectionConcurrency = 10
+	const collectionInterval = time.Minute
+	go startScraping(dbQueries, collectionConcurrency, collectionInterval)
 
 	log.Printf("Server started on port %s", port)
 	// what does Fatal mean?
